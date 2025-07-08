@@ -1,0 +1,54 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: login.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perhitungan Pajak Barang JNT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">JNT EXPRESS</a></h1>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="pajak.html">Pajak</a>
+      <a href="kontak.html">Kontak</a>
+      <a href="login.html">Logout</a>   
+    </nav>
+  </header>
+  
+  </header>
+
+  <section class="hero">
+    <h2>SELAMAT DATANG DI WEBSITE PEHITUNGAN PAJAK BARANG</h2>
+    <p>KAMI MENYEDIAKAN APLIKASI PEHTIUNGAN PAJAK BARANG YANG MUDAH UNTUK DIGUNAKAN.</p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h3>Layanan 1</h3>
+      <p>Kami menyediakan layanan profesional yang bisa diandalkan.</p>
+    </div>
+    <div class="card">
+      <h3>Layanan 2</h3>
+      <p>Kami bantu Anda Untuk Menghitung Pajak Barang Anda.</p>
+    </div>
+    <div class="card">
+      <h3>Layanan 3</h3>
+      <p>Dukungan penuh dan konsultasi kapan saja Anda butuh.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 JNT EXPRESS. Semua hak dilindungi.
+  </footer>
+</body>
+</html>

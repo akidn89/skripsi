@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalkulator Pajak Barang Kiriman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">JNT EXPRESS</a></h1>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="pajak.html">Pajak</a>
+      <a href="kontak.html">Kontak</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+  <div class="container">
+    <h1>Kalkulator Pajak Barang Kiriman</h1>
+    <input type="text" id="No Resi" placeholder="Masukkan No Resi">
+    <label for="hargaBarang">Harga Barang (Rp)</label>
+    <input type="number" id="hargaBarang" placeholder="Contoh: 100000">
+
+    <label for="kategori">Kategori Barang</label>
+    <select id="kategori">
+      <option value="KAOS">KAOS</option>
+      <option value="JAKET">JAKET</option>
+      <option value="CELANA">CELANA</option>
+      <option value="DRESS">DRESS</option>
+      <option value="KOSMETIK">KOSMETIK</option>
+      <option value="MAKANAN LAINNYA">MAKANAN</option>
+      <option value="AKSESORIS">AKSESORIS</option>
+      <option value="SPAREPART">SPAREPART</option>
+    </select>
+
+    <label for="qty">Jumlah Barang</label>
+    <input type="number" id="qty" value="1">
+
+    <button onclick="hitungPajak()">Hitung Pajak</button>
+
+    <table id="hasilTabel" style="display: none;">
+      <thead>
+        <tr>
+          <th>Kode HS</th>
+          <th>Kategori</th>
+          <th>Qty</th>
+          <th>Bea Masuk</th>
+          <th>PPN</th>
+          <th>PPH</th>
+          <th>BMTP</th>
+          <th>Total Pajak</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="kodeHS">-</td>
+          <td id="kategoriOut"></td>
+          <td id="qtyOut"></td>
+          <td id="beaMasuk"></td>
+          <td id="ppn"></td>
+          <td id="pph"></td>
+          <td id="bmtp"></td>
+          <td id="totalPajak"></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+</form>
+
+    <div class="note">
+      <strong>Catatan:</strong><br>
+      1. Nilai perhitungan pajak diambil berdasarkan kurs dollar perhari<br>
+      <strong></strong><br>
+      2. Apabila disaat proses pembayaran pajak ke Negara mengalami lebih bayar, maka kami akan mengembalikan  sisa uang yang berlebih kepada customer dengan persayarat membawa bukti pembayaran pajak barang kiriman ini.<br>
+      <strong></strong><br>
+      3. Pajak yang telah dibayarkan kepada Negara tidak dapat dikembalikan<br>
+      <strong></strong><br>
+      4. Batas pengembalian uang berlebih bayar pajak terhitung 30 hari sejak kwitansi diterbitkan, Jika dalam waktu  30 hari pelanggan tidak melakukan klaim  maka uang tersebut dianggap hangus.<br>
+      <strong></strong><br>
+      
+      <strong>Keterangan:</strong><br>
+      BM = Bea Masuk, PPN = Pajak Pertambahan Nilai, PPH = Pajak Penghasilan, BMTP = Pasal 22 Impor<br>
+      Perhitungan simulasi ini mengikuti contoh dari bukti J&T Express.
+    </div>
+  </div>
+
+
+  <script>
+    const tarifMap = {
+      "KAOS": { kodeHS: "62033290", bm: 0.25, ppn: 0.11, pph: 0.075, bmtp: 0.00 },
+      "JAKET": { kodeHS: "61046300", bm: 0.25, ppn: 0.11, pph: 0.075, bmtp: 0.00 },
+      "DRESS": { kodeHS: "61044900", bm: 0.25, ppn: 0.11, pph: 0.075, bmtp: 0.00 },
+      "CELANA": { kodeHS: "61043900", bm: 0.25, ppn: 0.11, pph: 0.075, bmtp: 0.00 },
+      "KOSMETIK": { kodeHS: "96033000", bm: 0.8, ppn: 0.11, pph: 0.00, bmtp: 0.00 },
+      "MAKANAN LAINNYA": { kodeHS: "19019099", bm: 0.8, ppn: 0.11, pph: 0.00, bmtp: 0.00 },
+      "AKSESORIS": { kodeHS: "39262090", bm: 0.8, ppn: 0.11, pph: 0.00, bmtp: 0.00 },
+      "SPAREPART": { kodeHS: "40169999", bm: 0.8, ppn: 0.11, pph: 0.00, bmtp: 0.00 }
+    };
+
+    function hitungPajak() {
+      const harga = parseFloat(document.getElementById('hargaBarang').value) || 0;
+      const qty = parseInt(document.getElementById('qty').value) || 1;
+      const kategori = document.getElementById('kategori').value;
+
+      const data = tarifMap[kategori];
+
+      if (!data) {
+        alert("Kategori tidak dikenali.");
+        return;
+      }
+
+      const totalBarang = harga * qty;
+      const beaMasuk = totalBarang * data.bm;
+      const ppn = totalBarang * data.ppn;
+      const pph = totalBarang * data.pph;
+      const bmtp = totalBarang * data.bmtp;
+      const totalPajak = beaMasuk + ppn + pph + bmtp;
+
+      // Tampilkan hasil
+      document.getElementById('kodeHS').innerText = data.kodeHS;
+      document.getElementById('kategoriOut').innerText = kategori;
+      document.getElementById('qtyOut').innerText = qty;
+      document.getElementById('beaMasuk').innerText = beaMasuk.toLocaleString('id-ID');
+      document.getElementById('ppn').innerText = ppn.toLocaleString('id-ID');
+      document.getElementById('pph').innerText = pph > 0 ? pph.toLocaleString('id-ID') : '-';
+      document.getElementById('bmtp').innerText = bmtp > 0 ? bmtp.toLocaleString('id-ID') : '-';
+      document.getElementById('totalPajak').innerText = totalPajak.toLocaleString('id-ID');
+
+      document.getElementById('hasilTabel').style.display = 'table';
+    }
+  </script>
+</body>
+</html>
